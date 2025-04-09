@@ -1,148 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Property Details</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Property Details</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <link rel="stylesheet" href="listedproperty.css">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
 </head>
-<body style="font-family: 'Inter', sans-serif; margin: 0; background: #f4f4f4; padding: 20px;"> 
+<body style="font-family: 'Poppins', sans-serif; margin: 0; background: #f0f0f0;">
 
-    <!-- Navbar -->
-    <nav style="background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <a href="/" style="font-size: 24px; font-weight: bold; text-decoration: none; color: #333;">Ghor</a>
-        <a href="/listing" style="text-decoration: none; color: #ff6f61; font-weight: 600;">Back to Listings</a>
-    </nav>
-
-    <!-- Main Container -->
-    <div style="display: flex; max-width: 1000px; margin: 30px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);">
-
-        <!-- Left: Property Details -->
-        <div style="width: 55%; padding-right: 20px;">
-            
-            <!-- Image Slider -->
-            <div style="position: relative; overflow: hidden; border-radius: 10px;">
-                <img id="sliderImage" src="" alt="Property Image" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px;">
-                <button onclick="prevImage()" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px; cursor: pointer;">⬅</button>
-                <button onclick="nextImage()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px; cursor: pointer;">➡</button>
-            </div>
-
-            <!-- Property Info -->
-            <h1 id="propertyTitle" style="margin-top: 20px; font-size: 24px; color: #333;"></h1>
-            <p id="propertyDescription" style="font-size: 16px; color: #555; line-height: 1.6;"></p>
-
-            <div style="margin-top: 20px; font-size: 18px; font-weight: 600; color: #333;">
-                <p>📍 <strong>City:</strong> <span id="propertyCity"></span></p>
-                <p>🏠 <strong>Address:</strong> <span id="propertyAddress"></span></p>
-                <p>📏 <strong>Area:</strong> <span id="propertyArea"></span> sq.ft.</p>
-                <p>🛏 <strong>Beds:</strong> <span id="propertyBeds"></span> | 🛁 <strong>Bathrooms:</strong> <span id="propertyBaths"></span></p>
-            </div>
-
-            <!-- Amenities -->
-            <div style="margin-top: 20px; font-size: 18px; font-weight: 600; color: #333;">
-                <p>🏠 <strong>Amenities:</strong> <span id="propertyAmenities"></span></p>
-            </div>
-
-            <!-- Map Container -->
-            <div id="map" style="width: 100%; height: 300px; border-radius: 10px; margin-top: 20px;"></div>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <img src="LOGO.png" alt="Logo" class="logo-img" style="max-width: 150px;"/>
+      </a>
+      <div class="nav-links">
+        <a href="/landingpage">Home</a>
+        <a href="/listing">Listings</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div class="nav-right">
+        <a href="tel:+918219594947" class="phone-number">
+          +91 8219594947
+        </a>
+        <div class="profile-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
         </div>
+      </div>
+    </div>
+  </nav>
 
-        <!-- Right: Inquiry Form -->
-        <div style="width: 45%; padding: 20px; background: #f9f9f9; border-radius: 10px;">
-            <h2 style="text-align: center; color: #333;">Interested? Contact Us</h2>
-            <form id="inquiryForm" style="display: flex; flex-direction: column;" onsubmit="submitInquiry(event)">
-                <input type="text" id="name" placeholder="Full Name" required 
-                    style="margin-bottom: 10px; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
-                <input type="email" id="email" placeholder="Email" required 
-                    style="margin-bottom: 10px; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
-                <input type="tel" id="phone" placeholder="Phone Number" required 
-                    style="margin-bottom: 10px; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
-                <button type="submit" 
-                    style="background: #ff6f61; color: white; padding: 12px; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer;">
-                    Submit Inquiry
-                </button>
-            </form>
-        </div>
+  <!-- Property Details Container -->
+  <div style="max-width: 1400px; margin: 40px auto; display: flex; gap: 40px; padding: 0 20px;">
+    
+    <!-- Property Card -->
+    <div style="flex: 2; background: #fff; border-radius: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); padding: 24px; color: #333; transition: transform 0.3s ease;">
+      
+      <!-- Image Slider -->
+      <div style="position: relative; border-radius: 20px; overflow: hidden; width: 100%; margin: 0 auto;">
+        <img id="sliderImage" src="" alt="Property Image" style="width: 100%; height: 450px; object-fit: cover; border-radius: 20px;">
+        <button onclick="prevImage()" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background: rgba(0,0,0,0.4); border: none; color: #fff; padding: 16px; font-size: 24px; border-radius: 50%; cursor: pointer;">‹</button>
+        <button onclick="nextImage()" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); background: rgba(0,0,0,0.4); border: none; color: #fff; padding: 16px; font-size: 24px; border-radius: 50%; cursor: pointer;">›</button>
+      </div>
+
+      <h1 id="propertyTitle" style="font-size: 32px; font-weight: 700; margin-top: 24px; color: #333; line-height: 1.2;"></h1>
+      <p id="propertyDescription" style="color: #555; line-height: 1.8; margin-bottom: 24px; font-size: 18px;"></p>
+
+      <!-- Property Details -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 16px; color: #444;">
+        <p><strong style="font-weight: 600; font-size: 18px;">City:</strong> <span id="propertyCity"></span></p>
+        <p><strong style="font-weight: 600; font-size: 18px;">Address:</strong> <span id="propertyAddress"></span></p>
+        <p><strong style="font-weight: 600; font-size: 18px;">Area:</strong> <span id="propertyArea"></span> sq.ft.</p>
+        <p><strong style="font-weight: 600; font-size: 18px;">Beds / Baths:</strong> <span id="propertyBeds"></span> / <span id="propertyBaths"></span></p>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <p style="font-size: 16px; color: #444;"><strong style="font-weight: 600;">Amenities:</strong> <span id="propertyAmenities"></span></p>
+      </div>
+
+      <!-- Map -->
+      <div id="map" style="width: 100%; height: 350px; border-radius: 20px; margin-top: 32px;"></div>
     </div>
 
-    <script>
-        let property, currentImageIndex = 0;
+    <!-- Inquiry Form -->
+    <div style="flex: 1; background: #fff; border-radius: 20px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); padding: 32px; text-align: center; transition: transform 0.3s ease;">
+      <h2 style="color: #333; font-weight: 700; margin-bottom: 24px; font-size: 28px;">Interested? Get in Touch</h2>
+      <form id="inquiryForm" onsubmit="submitInquiry(event)" style="display: flex; flex-direction: column; gap: 20px; text-align: left;">
+        <input type="text" id="name" placeholder="Full Name" required style="padding: 18px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; transition: border 0.3s ease;">
+        <input type="email" id="email" placeholder="Email" required style="padding: 18px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; transition: border 0.3s ease;">
+        <input type="tel" id="phone" placeholder="Phone Number" required style="padding: 18px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; transition: border 0.3s ease;">
+        <button type="submit" style="background: #ff6f61; color: #fff; padding: 18px; font-size: 18px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; transition: background 0.3s ease;">Submit Inquiry</button>
+      </form>
+    </div>
 
-        async function fetchPropertyDetails() {
-            const propertyId = localStorage.getItem("Interest");
-            if (!propertyId) {
-                alert("No property selected!");
-                return;
-            }
+  </div>
+  
+  <!-- Footer -->
+  <footer class="footer" style="background: #222; color: #fff; padding: 40px 0;">
+    <div class="footer-container" style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between;">
+      <div class="footer-section" style="flex: 1;">
+        <h4 style="font-weight: 600;">About Us</h4>
+        <p>Roofly is your trusted partner in finding the perfect property. We make real estate simple and accessible.</p>
+      </div>
+      <div class="footer-section" style="flex: 1;">
+        <h4 style="font-weight: 600;">Quick Links</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li><a href="/landingpage" style="color: #fff; text-decoration: none;">Home</a></li>
+          <li><a href="#about" style="color: #fff; text-decoration: none;">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-section" style="flex: 1;">
+        <h4 style="font-weight: 600;">Contact Us</h4>
+        <p>Email: rooflyestates@gmail.com</p>
+        <p>Phone: +91 77977 89073</p>
+        <p>Address: 134-A, Guru Fateh Town, Chandigarh-Ludhiana Highway, Punjab</p>
+      </div>
+    </div>
+    <div class="footer-bottom" style="text-align: center; padding-top: 20px;">
+      <p>&copy; 2025 Roofly. All rights reserved.</p>
+    </div>
+  </footer>
 
-            try {
-                const response = await fetch(`/api/properties/${propertyId}`);
-                property = await response.json();
-                if (!property) {
-                    alert("Property not found!");
-                    return;
-                }
-                displayProperty(property);
-            } catch (error) {
-                console.error("Error fetching property:", error);
-                alert("Failed to fetch property details.");
-            }
+  <script>
+    let property, currentImageIndex = 0;
+
+    async function fetchPropertyDetails() {
+      const propertyId = localStorage.getItem("Interest");
+      if (!propertyId) {
+        alert("No property selected!");
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/properties/${propertyId}`);
+        property = await response.json();
+        if (!property) {
+          alert("Property not found!");
+          return;
         }
+        displayProperty(property);
+      } catch (error) {
+        console.error("Error fetching property:", error);
+        alert("Failed to fetch property details.");
+      }
+    }
 
-        function displayProperty(property) {
-            document.getElementById("propertyTitle").innerText = property.Title;
-            document.getElementById("propertyDescription").innerText = property.Description || "No description available.";
-            document.getElementById("propertyCity").innerText = property.City;
-            document.getElementById("propertyAddress").innerText = property.Location;
-            document.getElementById("propertyArea").innerText = property.Area;
-            document.getElementById("propertyBeds").innerText = property.Bed;
-            document.getElementById("propertyBaths").innerText = property.Bath;
-            document.getElementById("sliderImage").src = property.Images?.[0] || "https://via.placeholder.com/900x400?text=No+Image+Available";
+    function displayProperty(property) {
+      document.getElementById("propertyTitle").innerText = property.Title;
+      document.getElementById("propertyDescription").innerText = property.Description || "No description available.";
+      document.getElementById("propertyCity").innerText = property.City;
+      document.getElementById("propertyAddress").innerText = property.Location;
+      document.getElementById("propertyArea").innerText = property.Area;
+      document.getElementById("propertyBeds").innerText = property.Bed;
+      document.getElementById("propertyBaths").innerText = property.Bath;
+      document.getElementById("sliderImage").src = property.Images?.[0] || "https://via.placeholder.com/900x450?text=No+Image+Available";
+      document.getElementById("propertyAmenities").innerText = property.Amenities?.join(', ') || "No amenities listed.";
+    }
 
-            // Display Amenities
-            const amenitiesList = property.Amenities?.join(', ') || "No amenities available.";
-            document.getElementById("propertyAmenities").innerText = amenitiesList;
-        }
+    function prevImage() {
+      if (!property || !property.Images.length) return;
+      currentImageIndex = (currentImageIndex - 1 + property.Images.length) % property.Images.length;
+      document.getElementById("sliderImage").src = property.Images[currentImageIndex];
+    }
 
-        function prevImage() {
-            if (!property || !property.Images.length) return;
-            currentImageIndex = (currentImageIndex - 1 + property.Images.length) % property.Images.length;
-            document.getElementById("sliderImage").src = property.Images[currentImageIndex];
-        }
+    function nextImage() {
+      if (!property || !property.Images.length) return;
+      currentImageIndex = (currentImageIndex + 1) % property.Images.length;
+      document.getElementById("sliderImage").src = property.Images[currentImageIndex];
+    }
 
-        function nextImage() {
-            if (!property || !property.Images.length) return;
-            currentImageIndex = (currentImageIndex + 1) % property.Images.length;
-            document.getElementById("sliderImage").src = property.Images[currentImageIndex];
-        }
+    async function submitInquiry(event) {
+      event.preventDefault();
+      const confirm = await fetch('/interest', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          Name: document.getElementById("name").value,
+          Email: document.getElementById("email").value,
+          Phone: document.getElementById("phone").value,
+          PropertyId: localStorage.getItem("Interest")
+        }),
+      });
 
-        async function submitInquiry(event) {
-            event.preventDefault();
-            const confirm = await fetch('/interest', {
-                method: 'POST',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    Name: document.getElementById("name").value,
-                    Email: document.getElementById("email").value,
-                    Phone: document.getElementById("phone").value,
-                    PropertyId: localStorage.getItem("Interest")
-                }),
-            });
+      const status = await confirm.json();
+      alert(status.status === "OK" ? "Details submitted" : "Sorry, some error occurred.");
+    }
 
-            const status = await confirm.json();
-
-            if (status.status == "OK") {
-                alert("Details submitted");
-            } else {
-                alert("Sorry, some error occurred.");
-            }
-        }
-
-        window.onload = fetchPropertyDetails;
-    </script>
+    window.onload = fetchPropertyDetails;
+  </script>
 
 </body>
 </html>
