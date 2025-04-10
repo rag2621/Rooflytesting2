@@ -490,7 +490,7 @@ router.get("/:page", (req, res) => {
 
 
 
-const PORT = 5500;
+const PORT = 5501;
 const MONGO_URI = "mongodb+srv://raghavdhiman2006:123@raghav.loyrcrt.mongodb.net/"
 
 mongoose

@@ -6,52 +6,21 @@
   <title>Roofly - Property Listings</title>
   <link rel="stylesheet" href="./listing.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    .dropdown {
-      position: absolute;
-      top: 60px;
-      right: 20px;
-      background: white;
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      display: none;
-      z-index: 999;
-      min-width: 150px;
-      font-size: 14px;
-    }
-
-    .dropdown.active {
-      display: block;
-    }
-
-    .username-label {
-      padding: 10px 15px;
-      font-weight: 600;
-      color: #555;
-      cursor: default;
-    }
-
-    .profile-container {
-      position: relative;
-      cursor: pointer;
-    }
-  </style>
 </head>
-<body style="font-family: 'Inter', sans-serif; margin: 0; background: #f4f4f4;">
-
+<body>
   <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="/" class="logo">
-        <img src="LOGO.png" alt="Ghor Logo" class="logo-img">
+      <a href="/landingpage" class="logo">
+        <img src="LOGO.png" alt="Roofly Logo" class="logo-img">
       </a>
-      <div class="nav-links">
+      <div class="nav-links desktop-nav">
         <a href="/landingpage">Home</a>
         <a href="/listing" class="active">Properties</a>
-        <a href="/contact">Contact</a>
+        <a href="/landingpage#services">Services</a>
+        <a href="/landingpage#about">About</a>
       </div>
-      <div class="nav-right">
+      <div class="nav-right desktop-nav">
         <div class="profile-container" onclick="toggleDropdown()">
           <div class="profile-icon">
             <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="none" stroke="currentColor" stroke-width="2"
@@ -65,14 +34,48 @@
           </div>
         </div>
       </div>
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu(event)">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-nav-links">
+          <a href="/landingpage">Home</a>
+          <a href="/listing" class="active">Properties</a>
+          <a href="/landingpage#services">Services</a>
+          <a href="/landingpage#about">About</a>
+          <div class="mobile-profile-section">
+            <div class="profile-container">
+              <div class="profile-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div class="username-label" id="mobileUsernameDisplay">Hello</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </nav>
 
   <!-- Search Section -->
-  <section style="padding: 20px; background: white; text-align: center;">
-    <form id="searchForm" onsubmit="handleSearch(event)" style="display: flex; max-width: 600px; margin: auto;">
-      <input type="text" id="searchInput" placeholder="Search location..." required style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px 0 0 5px;">
-      <select id="propertyType" style="padding: 10px; font-size: 16px; border: 1px solid #ddd;">
+  <section class="search-section">
+    <form id="searchForm" onsubmit="handleSearch(event)" class="search-form">
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search location..." 
+        required 
+        class="search-input"
+      >
+      <div class="search-divider"></div>
+      <select id="propertyType" class="property-type-select">
         <option value="">Property Type</option>
         <option value="house">House</option>
         <option value="apartment">Apartment</option>
@@ -80,18 +83,24 @@
         <option value="Flat">Flat</option>
         <option value="PG">PG</option>
       </select>
-      <button type="submit" style="padding: 10px 15px; font-size: 16px; border: none; background: #ff6f61; color: white; border-radius: 0 5px 5px 0; cursor: pointer;">Search</button>
+      <button type="submit" class="search-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
     </form>
   </section>
 
   <!-- Property Listings -->
   <section class="property-section">
-    <div id="no-properties-message" style="display: none; text-align: center; font-size: 18px; color: #ff6f61; padding: 20px;">
+    <div id="no-properties-message" class="no-properties-message" style="display: none;">
       No properties found based on your search.
     </div>
     <div class="property-grid" id="property-grid"></div>
   </section>
 
+  <!-- Footer -->
   <footer class="footer">
     <div class="footer-container">
       <div class="footer-content">
@@ -129,6 +138,9 @@
           displayProperties(properties);
         }
       }
+
+      // Initialize menu state
+      window.isMenuOpen = false;
     });
 
     function displayProperties(properties) {
@@ -205,7 +217,62 @@
         dropdown.classList.remove('active');
       }
     }
-  </script>
 
+    function toggleMobileMenu(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuBtn = document.getElementById('mobileMenuBtn');
+      const overlay = document.querySelector('.mobile-menu-overlay');
+      
+      // Toggle menu state
+      window.isMenuOpen = !window.isMenuOpen;
+      
+      mobileMenu.classList.toggle('active');
+      menuBtn.classList.toggle('active');
+      
+      if (!overlay && window.isMenuOpen) {
+        const newOverlay = document.createElement('div');
+        newOverlay.className = 'mobile-menu-overlay';
+        newOverlay.onclick = function(e) {
+          e.stopPropagation();
+          toggleMobileMenu();
+        };
+        document.body.appendChild(newOverlay);
+      } else if (overlay) {
+        overlay.classList.toggle('active');
+        if (!window.isMenuOpen) {
+          overlay.remove();
+        }
+      }
+      
+      // Update mobile username display
+      const username = localStorage.getItem('username');
+      if (username) {
+        document.getElementById('mobileUsernameDisplay').textContent = `Hello, ${username}`;
+      }
+    }
+
+    function toggleMobileDropdown(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      toggleDropdown();
+    }
+
+    // Handle clicks on the document
+    document.addEventListener('click', function(event) {
+      if (window.isMenuOpen && !event.target.closest('#mobileMenu') && !event.target.closest('#mobileMenuBtn')) {
+        toggleMobileMenu();
+      }
+    });
+
+    // Prevent menu from closing when clicking inside it
+    document.getElementById('mobileMenu').addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+  </script>
 </body>
 </html>

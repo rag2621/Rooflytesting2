@@ -35,17 +35,55 @@
                     <button class="dropdown-btn signup-btn" onclick="window.location.href='/signup_profile'">Signup</button>
                 </div>
             </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <img src="./LOGO.png" alt="Roofly Logo" class="logo" style="height: 40px;">
+            <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+        </div>
+        <div class="mobile-nav-links">
+            <a href="/landingpage" class="active">Home</a>
+            <a href="/listing">Properties</a>
+            <a href="#services">Services</a>
+            <a href="#about">About</a>
+            <div id="mobileCareersLink"></div>
+        </div>
+        <div class="mobile-auth-buttons">
+            <button id="mobileStartListingBtn" class="start-listing-btn" onclick="redirectToListing()">Start Listing</button>
+            <button class="dropdown-btn login-btn" onclick="window.location.href='/Login_profile'">Login</button>
+            <button class="dropdown-btn signup-btn" onclick="window.location.href='/signup_profile'">Signup</button>
+        </div>
+        <div class="mobile-profile-section" id="mobileProfileSection">
+            <!-- Profile content will be dynamically added here -->
+        </div>
+    </div>
+
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if (!token) {
+                // Add Careers link to desktop nav
                 const navLinks = document.querySelector('.nav-links');
                 const careersLink = document.createElement('a');
                 careersLink.href = "/Careers";
                 careersLink.textContent = "Careers";
                 navLinks.appendChild(careersLink);
+
+                // Add Careers link to mobile nav
+                const mobileCareersDiv = document.getElementById('mobileCareersLink');
+                const mobileCareersLink = document.createElement('a');
+                mobileCareersLink.href = "/Careers";
+                mobileCareersLink.textContent = "Careers";
+                mobileCareersDiv.appendChild(mobileCareersLink);
             }
         });
     </script>
@@ -645,7 +683,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </section>
 
-    <div id="map" style="width: 800px; height: 500px; margin: auto; border: 2px solid black;"></div>
+    <!-- <div id="map" style="width: 800px; height: 500px; margin: auto; border: 2px solid black;"></div>
 
     <script>
 
@@ -672,7 +710,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
     </script>
-   
+    -->
 
     <!-- Footer -->
     <footer class="footer">
@@ -703,5 +741,65 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         </div>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking overlay
+        document.getElementById('mobileMenuOverlay').addEventListener('click', toggleMobileMenu);
+
+        // Update mobile profile section based on login status
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const mobileProfileSection = document.getElementById('mobileProfileSection');
+            
+            if (token) {
+                const user = localStorage.getItem('username');
+                mobileProfileSection.innerHTML = `
+                    <div class="mobile-profile-info">
+                        <span class="username">${user}</span>
+                        <button id="mobileKycBtn" class="kyc-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                            Verify KYC
+                        </button>
+                        <a href="#" id="mobileLogoutBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                <polyline points="10 17 15 12 10 7"></polyline>
+                                <line x1="15" y1="12" x2="3" y2="12"></line>
+                            </svg>
+                            Logout
+                        </a>
+                    </div>
+                `;
+
+                // Add event listeners for mobile buttons
+                document.getElementById('mobileLogoutBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('Email');
+                    location.reload();
+                });
+
+                document.getElementById('mobileKycBtn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if(localStorage.getItem('KYC') === 'Pending') {
+                        window.location.href = '/auth/kyc';
+                    } else {
+                        alert('Already verified');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

@@ -16,20 +16,46 @@
                 <img src="LOGO.png" alt="Ghor Logo" class="logo-img">
             </a>
             
-            <div class="nav-links">
-                <a href="/landing_page/landingpage.html" id="home-link">Home</a>
-               
-                
-                <a href="/contact/contact.html">Contact</a>
+            <div class="nav-links desktop-nav">
+                <a href="/landingpage" id="home-link">Home</a>
+                <a href="/listing">Properties</a>
+                <a href="#services">Services</a>
+                <a href="#about">About</a>
+                <a href="/contact">Contact</a>
             </div>
             
-            <div class="nav-right">
+            <div class="nav-right desktop-nav">
                 <div class="profile-icon">
                     <i class="fas fa-user"></i>
                 </div>
             </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="mobileMenuClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="mobile-nav-links">
+            <a href="/landingpage" id="mobile-home-link">Home</a>
+            <a href="/listing">Properties</a>
+            <a href="#services">Services</a>
+            <a href="#about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/profile">Profile</a>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
     <!-- Main Content -->
     <main class="add-property">
@@ -191,8 +217,6 @@
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="/landingpage">Home</a></li>
-                        
-                
                         <li><a href="#about">About</a></li>
                     </ul>
                 </div>
@@ -209,27 +233,62 @@
         </div>
     </footer>
 
-    <script> 
-    function redirect(){
-        if(localStorage.getItem("token") && localStorage.getItem("KYC")=="Approved"){
+    <!-- Mobile Menu Script -->
+    <script>
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const propertyForm = {
+            title: document.getElementById('property-title'),
+            type: document.getElementById('property-type'),
+            bedrooms: document.getElementById('bedrooms'),
+            bathrooms: document.getElementById('bathrooms'),
+            city: document.getElementById('city'),
+            address: document.getElementById('property-address'),
+            area: document.getElementById('area'),
+            description: document.getElementById('property-description'),
+            images: document.getElementById('property-images'),
+            submit: document.getElementById('submit'),
+            uploadPreview: document.getElementById('upload-preview')
+        };
 
-        }
-        else{
-            window.alert("You need to login or verify your kyc for listing properties!!");
+        // Global Variables
+        let imageFiles = [];
 
-            if(localStorage.getItem("type")){
-                window.location.replace("/brokerpage");
+        // Authentication & Authorization
+        function checkAuthorization() {
+            if (!(localStorage.getItem("token") && localStorage.getItem("KYC") == "Approved")) {
+                window.alert("You need to login or verify your kyc for listing properties!");
+                window.location.replace(localStorage.getItem("type") ? "/brokerpage" : "/landingpage");
             }
-            else{
-                window.location.replace("/landingpage");
-            }
         }
-    }
 
-        window.onload=redirect;
-    let files=[];
-         async function uploadImages() {
-           const  fileInput = document.getElementById("property-images");
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+            mobileMenuOverlay.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        }
+
+        // Image Upload Functions
+        async function uploadSingleImage(file) {
+            const formData = new FormData();
+            formData.append("image", file);
+            formData.append("id", localStorage.getItem("propertyinfo"));
+
+            const response = await fetch("/upload", { method: "POST", body: formData });
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.error);
+            return data.imageUrl;
+        }
+
+        async function uploadImages() {
+            const fileInput = propertyForm.images;
+            
             if (!fileInput.files.length) {
                 alert("Please select at least one image.");
                 return;
@@ -239,166 +298,140 @@
                 return;
             }
 
-           /* const uploadedImagesDiv = document.getElementById("uploadedImages");
-            uploadedImagesDiv.innerHTML = "";
-            document.getElementById("message").innerText = "Uploading...";*/
-
-            // Convert FileList to Array
-            files = Array.from(fileInput.files);
-
-            // Upload Each Image One by One (Parallel Execution)
-            const uploadPromises = files.map(file => uploadSingleImage(file));
+            imageFiles = Array.from(fileInput.files);
+            const uploadPromises = imageFiles.map(file => uploadSingleImage(file));
 
             try {
                 const uploadedUrls = await Promise.all(uploadPromises);
-                document.getElementById("upload-preview").innerText = "All images uploaded successfully!";
+                propertyForm.uploadPreview.innerText = "All images uploaded successfully!";
                 
-                // Display All Uploaded Images
-             /*   uploadedUrls.forEach(url => {
-                    const img = document.createElement("img");
-                    img.src = url;
-                    uploadedImagesDiv.appendChild(img);
-                    setTimeout(()=>{
-                        window.close();
-
-                    },1000);
-                  
-                });*/
                 window.alert("Property Listed Successfully");
-                if(localStorage.getItem("type")){
-                    window.location.replace("/brokerpage");
-                }
-                else{
-                    window.location.replace("/landingpage");
-                }
-
+                window.location.replace(localStorage.getItem("type") ? "/brokerpage" : "/landingpage");
             } catch (error) {
                 console.error("Error:", error);
-                document.getElementById("message").innerText = "Upload failed.";
+                propertyForm.uploadPreview.innerText = "Upload failed.";
             }
         }
 
-        async function uploadSingleImage(file) {
-            const formData = new FormData();
-            formData.append("image", file);
-            formData.append("id",localStorage.getItem("propertyinfo"));
+        // Address Autocomplete
+        function setupAddressAutocomplete() {
+            const suggestionsBox = document.getElementById('autocomplete-suggestions');
 
-            const response = await fetch("/upload", { method: "POST", body: formData });
-            const data = await response.json();
+            propertyForm.address.addEventListener('input', function() {
+                const query = this.value;
 
-            if (!response.ok) throw new Error(data.error);
-            return data.imageUrl;
-        }
-
-
-
-         const input = document.getElementById('property-address');
-         const suggestionsBox = document.getElementById('autocomplete-suggestions');
-             input.addEventListener('input', function () {
-            const query = input.value;
-
-            if (!query) {
-                suggestionsBox.style.display = 'none';
-                return;
-            }
-
-            fetch(`/api/address-suggestions?query=${encodeURIComponent(query)}`, {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": localStorage.getItem("token")
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'OK' && data.predictions.length > 0) {
-                    suggestionsBox.innerHTML = '';
-                    suggestionsBox.style.display = 'block';
-
-                    data.predictions.forEach(prediction => {
-                        const li = document.createElement('li');
-                        li.textContent = prediction.description;
-                        li.onclick = function () {
-                            input.value = prediction.description;
-                            suggestionsBox.style.display = 'none';
-                        };
-                        suggestionsBox.appendChild(li);
-                    });
-                } else {
+                if (!query) {
                     suggestionsBox.style.display = 'none';
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching suggestions:', error);
-                suggestionsBox.style.display = 'none';
+
+                fetch(`/api/address-suggestions?query=${encodeURIComponent(query)}`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": localStorage.getItem("token")
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'OK' && data.predictions.length > 0) {
+                        suggestionsBox.innerHTML = '';
+                        suggestionsBox.style.display = 'block';
+
+                        data.predictions.forEach(prediction => {
+                            const li = document.createElement('li');
+                            li.textContent = prediction.description;
+                            li.onclick = function() {
+                                propertyForm.address.value = prediction.description;
+                                suggestionsBox.style.display = 'none';
+                            };
+                            suggestionsBox.appendChild(li);
+                        });
+                    } else {
+                        suggestionsBox.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching suggestions:', error);
+                    suggestionsBox.style.display = 'none';
+                });
             });
-        });
+        }
 
-
-
-        document.getElementById("submit").addEventListener("click", function (event) {
+        // Form Submission
+        function handleFormSubmit(event) {
             event.preventDefault();
-        
 
             const propertyData = {
-                title: document.getElementById("property-title").value,
-                propertyType: document.getElementById("property-type").value,
-                bedrooms: document.getElementById("bedrooms").value,
-                bathrooms: document.getElementById("bathrooms").value,
-                city: document.getElementById("city").value,
-                location: document.getElementById("property-address").value,
-                area: document.getElementById("area").value,
-                description: document.getElementById("property-description").value,
+                title: propertyForm.title.value,
+                propertyType: propertyForm.type.value,
+                bedrooms: propertyForm.bedrooms.value,
+                bathrooms: propertyForm.bathrooms.value,
+                city: propertyForm.city.value,
+                location: propertyForm.address.value,
+                area: propertyForm.area.value,
+                description: propertyForm.description.value,
                 amenities: [],
-                Email:localStorage.getItem("Email"),
+                Email: localStorage.getItem("Email")
             };
-       
-            const amenitiesDiv = document.querySelector('.amenities-container');
-    const amenitiesCheckboxes = amenitiesDiv.querySelectorAll('input[type="checkbox"]'); // Access checkboxes inside this div
 
-    amenitiesCheckboxes.forEach(function (checkbox) {
-        if (checkbox.checked) {
-            propertyData.amenities.push(checkbox.value);
-        }
-    });
+            const amenitiesCheckboxes = document.querySelectorAll('.amenities-container input[type="checkbox"]');
+            amenitiesCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    propertyData.amenities.push(checkbox.value);
+                }
+            });
+
             fetch('/listing/propertyinfo', {
-                method: 'POST', 
+                method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(propertyData),
-            }).then(res => {
-                res.json().then(ans => {
-                    localStorage.setItem("propertyinfo", ans.PId);
-                    uploadImages();
+                body: JSON.stringify(propertyData)
+            })
+            .then(res => res.json())
+            .then(ans => {
+                localStorage.setItem("propertyinfo", ans.PId);
+                uploadImages();
+            });
+        }
 
+        // Navigation Functions
+        function handleHomeNavigation(event) {
+            event.preventDefault();
+            window.location.href = localStorage.getItem('type') ? '/brokerpage' : '/landingpage';
+        }
 
-                  //  window.open("/photo/up");
-                });
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authorization
+            checkAuthorization();
+
+            // Setup mobile menu listeners
+            mobileMenuBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                toggleMobileMenu();
             });
 
-           
+            mobileMenuClose.addEventListener('click', e => {
+                e.stopPropagation();
+                toggleMobileMenu();
+            });
 
-      
+            mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+
+            mobileMenu.addEventListener('click', e => e.stopPropagation());
+
+            // Setup form submission
+            propertyForm.submit.addEventListener('click', handleFormSubmit);
+
+            // Setup navigation
+            document.getElementById('home-link').addEventListener('click', handleHomeNavigation);
+            document.getElementById('mobile-home-link').addEventListener('click', handleHomeNavigation);
+
+            // Setup address autocomplete
+            setupAddressAutocomplete();
         });
-       
     </script>
-     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Add an event listener to the "Home" link
-            document.getElementById('home-link').addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent the default link behavior
-        
-                // Check if 'type' exists in localStorage
-                if (localStorage.getItem('type')) {
-                    // Redirect to broker-assigned properties page if 'type' is in localStorage
-                    window.location.href = '/brokerpage';
-                } else {
-                    // Otherwise, go to the landing page
-                    window.location.href = '/landingpage';
-                }
-            });
-        });
-            </script>
 </body>
 </html>
