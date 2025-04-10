@@ -67,6 +67,65 @@
         </div>
     </div>
 
+    <style>
+    .start-listing {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        width: 100%;
+    }
+
+    .start-listing:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    .start-listing:focus {
+        outline: none;
+    }
+
+    .start-listing:active {
+        background-color: #004085;
+        transform: scale(1);
+    }
+
+    .dropdown-btn {
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .login-btn {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .signup-btn {
+        background-color: #ffc107;
+        color: white;
+    }
+
+    .login-btn:hover {
+        background-color: #218838;
+    }
+
+    .signup-btn:hover {
+        background-color: #e0a800;
+    }
+</style>
+
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
