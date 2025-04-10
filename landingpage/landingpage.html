@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const user = localStorage.getItem("username");
 
             // Show username and logout button
-        profileDropdown.innerHTML = `
+    profileDropdown.innerHTML = `
     <span class="username">${user}</span>
     <button id="kycBtn" class="kyc-button">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -274,7 +274,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
     </script>
-    <style>
+   <style>
+    /* General Dropdown Container Styling */
+    .profileDropdown {
+        padding: 12px;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Username Styling */
+    .username {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 12px;
+    }
+
+    /* KYC Button Styling */
     .kyc-button {
         background-color: #28a745;
         color: white;
@@ -286,6 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
         display: flex;
         align-items: center;
         gap: 8px;
+        margin-bottom: 12px;
         transition: background-color 0.3s ease;
     }
 
@@ -297,8 +319,31 @@ document.addEventListener("DOMContentLoaded", () => {
         width: 18px;
         height: 18px;
     }
-</style>
 
+    /* Logout Button Styling */
+    #logoutBtn {
+        font-size: 16px;
+        color: #e74c3c;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #logoutBtn:hover {
+        background-color: #f8d7da;
+        color: #c0392b;
+    }
+
+    #logoutBtn svg {
+        width: 18px;
+        height: 18px;
+    }
+</style>
     <!-- Hero Section (Page 1) -->
     <section id="home" class="hero">
         <div class="hero-container">
