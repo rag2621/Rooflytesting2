@@ -56,7 +56,7 @@
             <a href="#services">Services</a>
             <a href="#about">About</a>
             <div id="mobileCareersLink"></div>
-             <button id="startListingBtn" class="start-listing" onclick="redirectToListing()" style="display: none;">Start Listing</button>
+             <button id="startListing" class="start-listing" onclick="redirectToListing()" style="display: none;">Start Listing</button>
         </div>
         <div class="mobile-auth-buttons">
            
@@ -897,7 +897,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <script>
     // Check if token exists in local storage
     const token = localStorage.getItem('token');
-    const startListingBtn = document.getElementById('startListingBtn');
+    const startListingBtn = document.getElementById('startListing');
 
     // Show the Start Listing button if token exists
     if (token) {
