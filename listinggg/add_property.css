@@ -123,7 +123,8 @@ body {
 }
 
 .form-section h3 {
-    margin-left: 20px; /* Moves the heading a bit to the right */
+   text-align: left;  /* Align the heading to the right */
+    margin-right: 20px; 
 }
 
 .add-property {
