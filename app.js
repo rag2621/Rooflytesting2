@@ -42,13 +42,19 @@ const generateToken = (user) => jwt.sign(
     { expiresIn: "7d" }
 );
 const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-      folder: 'uploads', // Cloudinary ke andar ek folder banayega
-      format: async (req, file) => 'png', // Image format define karein
-      public_id: (req, file) => file.originalname.split('.')[0] // File ka naam
-    }
-  });
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads',
+    format: async (req, file) => {
+      const ext = file.originalname.split('.').pop().toLowerCase();
+      if (['jpg', 'jpeg', 'png'].includes(ext)) {
+        return ext;
+      }
+      return 'png'; // default format
+    },
+    public_id: (req, file) => file.originalname.split('.')[0]
+  }
+});
   
   const upload = multer({ storage: storage });
 
@@ -70,10 +76,10 @@ const verifyToken = (req, res, next) => {
   };
 
 
-const sslOptions = {
+/*const sslOptions = {
     key: fs.readFileSync(path.join(__dirname, "server.key")), 
     cert: fs.readFileSync(path.join(__dirname, "server.cert"))
-};
+};*/
 
 
 const router = express.Router();
@@ -490,15 +496,16 @@ router.get("/:page", (req, res) => {
 
 
 
-const PORT = 5502;
+const PORT = 5500;
 const MONGO_URI = "mongodb+srv://raghavdhiman2006:123@raghav.loyrcrt.mongodb.net/"
 
 mongoose
     .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("✅ MongoDB Connected");
-    app.listen(PORT, () => {
+        app.listen(PORT, () => {
           console.log(`🚀 HTTPS Server running on port ${PORT}`);
       });
     })
     .catch(err => console.error(" MongoDB Connection Error:", err));
+
