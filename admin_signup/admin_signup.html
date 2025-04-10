@@ -81,13 +81,13 @@
                         <select id="country" name="country" required>
                             <option value="">Select a country</option>
                             <option value="India">India</option>
-                            <option value="United States">United States</opti States>
+                            <option value="United States">United States</option>
                             <option value="United Arab Emirates">UAE</option>
                         </select>
-                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="city">City of Residence</label>
-                        <select id="city" name="city" >
+                        <select id="city" name="city">
                             <option value="">Select Country First</option>
                         </select>
                     </div>
@@ -101,82 +101,62 @@
     </div>
 </body>
 <script>
-
 document.getElementById("signup-form").addEventListener("submit", async function (event) {
-            event.preventDefault(); // ❌ Prevent Default Form Submission
+    event.preventDefault(); // ❌ Prevent Default Form Submission
 
-            const Username = document.getElementById('dealer-name').value;
-            const Email = document.getElementById('email').value;
-            const Pass = document.getElementById('password').value;
-            const Country=document.getElementById('country').value;
-            const City=document.getElementById('city').value;
+    const Username = document.getElementById('dealer-name').value;
+    const Email = document.getElementById('email').value;
+    const Pass = document.getElementById('password').value;
+    const Country = document.getElementById('country').value;
+    const City = document.getElementById('city').value;
 
-            console.log("Form Data:", { Username, Email, Pass }); // ✅ Debugging
+    console.log("Form Data:", { Username, Email, Pass }); // ✅ Debugging
 
-            try {
-                const response = await fetch("/broker/signup", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        uname: Username,
-                        email: Email,
-                        password: Pass,
-                        Country:Country,
-                        City:City,
-                        KYC:"Pending",
-                    })
-                });
-
-                const data = await response.json();
-                console.log("Success:", data);
-
-                if (response.ok) {
-                    if(data.message=="Signup successful"){
-                    alert("Signup Successful!");
-                    window.location.href = "/Login_profile";}
-                    else{
-                        alert("Email already in use");
-                    }
-                     
-                } else {
-                    alert(data.error || "Account already exists!");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Error occurred!");
-            }
+    try {
+        const response = await fetch("/broker/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                uname: Username,
+                email: Email,
+                password: Pass,
+                Country: Country,
+                City: City,
+                KYC: "Pending",
+            })
         });
 
-        let countries=[];
-    document.addEventListener("DOMContentLoaded", async function () {
-        const countryDropdown = document.getElementById("country");
-        const cityDropdown = document.getElementById("city");
-        const apiKey = "V6L+j4RZZ3ccX5RMto1BYQ==WueC0TJhOSCCflBu"; // Replace with your API key
+        const data = await response.json();
+        console.log("Success:", data);
 
+        if (response.ok) {
+            if (data.message == "Signup successful") {
+                alert("Signup Successful!");
+                window.location.href = "/Login_profile";
+            } else {
+                alert("Email already in use");
+            }
+        } else {
+            alert(data.error || "Account already exists!");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Error occurred!");
+    }
+});
 
-        
-      
+document.getElementById("country").addEventListener('change', async function () {
+    const code = await fetch(`/api/countrycode/${this.value}`);
+    const cc = await code.json();
 
-
-
-  
-    });
-
-    document.getElementById("country").addEventListener('change', async function(){
-
-const code=await fetch(`/api/countrycode/${this.value}`);
-const cc=await code.json();
-
-const countryName = this.value;
+    const countryName = this.value;
     const cityDropdown = document.getElementById("city");
 
     if (countryName) {
         cityDropdown.innerHTML = '<option value="">Loading...</option>';
-        
-       
-        
+
         cityDropdown.innerHTML = ''; // Clear previous options
         cc.forEach(city => {
             const option = document.createElement('option');
@@ -188,8 +168,7 @@ const countryName = this.value;
         cityDropdown.innerHTML = '<option value="">Select Country First</option>';
     }
 
-console.log(cc);
-
+    console.log(cc);
 });
 </script>
 </html>
