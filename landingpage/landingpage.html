@@ -788,6 +788,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const mobileProfileSection = document.getElementById('mobileProfileSection');
             
             if (token) {
+                 const authButtons = document.querySelector('.mobile-auth-buttons');
+    if (authButtons) {
+        authButtons.style.display = 'none';
+    }
                 const user = localStorage.getItem('username');
                 mobileProfileSection.innerHTML = `
                     <div class="mobile-profile-info">
