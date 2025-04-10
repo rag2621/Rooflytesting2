@@ -490,14 +490,14 @@ router.get("/:page", (req, res) => {
 
 
 
-const PORT = 5501;
+const PORT = 5502;
 const MONGO_URI = "mongodb+srv://raghavdhiman2006:123@raghav.loyrcrt.mongodb.net/"
 
 mongoose
     .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("✅ MongoDB Connected");
-        https.createServer(sslOptions, app).listen(PORT, () => {
+    app.listen(PORT, () => {
           console.log(`🚀 HTTPS Server running on port ${PORT}`);
       });
     })
