@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roofly - Add Property</title>
-      <link rel="stylesheet" href="add_property.css">
+    <title>Ghor - Add Property</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="add_property.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -27,17 +27,18 @@
         .form-group {
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         #property-description {
-            padding: 16px;
-            border-radius: 6px;
+            padding: 20px;
+            border-radius: 8px;
             border: 1px solid #ccc;
+            margin-left: 10px;
         }
 
-        /* Reduce space between address and city */
         #property-address {
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         #autocomplete-suggestions {
@@ -78,6 +79,25 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary.loading::after {
+            content: '';
+            width: 18px;
+            height: 18px;
+            border: 3px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .btn-secondary {
@@ -90,14 +110,16 @@
             margin-right: 10px;
         }
 
-        /* Ensure suggestions appear right under the address input */
-        .form-group {
-            position: relative;
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
+  <nav class="navbar">
         <div class="nav-container">
             <a href="/" class="logo">
                 <img src="LOGO.png" alt="Ghor Logo" class="logo-img">
@@ -520,5 +542,50 @@
             setupAddressAutocomplete();
         });
     </script>
+<script>
+    function handleFormSubmit(event) {
+        event.preventDefault();
+
+        propertyForm.submit.classList.add("loading");
+        propertyForm.submit.disabled = true;
+
+        const propertyData = {
+            title: propertyForm.title.value,
+            propertyType: propertyForm.type.value,
+            bedrooms: propertyForm.bedrooms.value,
+            bathrooms: propertyForm.bathrooms.value,
+            city: propertyForm.city.value,
+            location: propertyForm.address.value,
+            area: propertyForm.area.value,
+            description: propertyForm.description.value,
+            amenities: [],
+            Email: localStorage.getItem("Email")
+        };
+
+        const amenitiesCheckboxes = document.querySelectorAll('.amenities-container input[type="checkbox"]');
+        amenitiesCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                propertyData.amenities.push(checkbox.value);
+            }
+        });
+
+        fetch('/listing/propertyinfo', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(propertyData)
+        })
+        .then(res => res.json())
+        .then(ans => {
+            localStorage.setItem("propertyinfo", ans.PId);
+            uploadImages();
+        })
+        .finally(() => {
+            propertyForm.submit.classList.remove("loading");
+            propertyForm.submit.disabled = false;
+        });
+    }
+</script>
 </body>
 </html>
