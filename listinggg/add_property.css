@@ -122,6 +122,10 @@ body {
     margin-right: 20px;  /* Optional, adjust the space from the right edge */
 }
 
+.form-section h3 {
+    margin-left: 20px; /* Moves the heading a bit to the right */
+}
+
 .add-property {
     padding-top: 100px;  /* Increased padding to account for fixed navbar */
     padding-bottom: 2rem;
