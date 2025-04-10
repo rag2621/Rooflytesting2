@@ -116,6 +116,12 @@ body {
 }
 
 /* Add Property Form */
+
+.form-section h2 {
+    text-align: right;  /* Align the heading to the right */
+    margin-right: 20px;  /* Optional, adjust the space from the right edge */
+}
+
 .add-property {
     padding-top: 100px;  /* Increased padding to account for fixed navbar */
     padding-bottom: 2rem;
