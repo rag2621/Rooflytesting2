@@ -894,6 +894,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     </script>
+    <script>
+    // Check if token exists in local storage
+    const token = localStorage.getItem('token');
+    const startListingBtn = document.getElementById('startListingBtn');
+
+    // Show the Start Listing button if token exists
+    if (token) {
+        startListingBtn.style.display = 'block';
+    }
+</script>
     <style>
     #mobileLogoutBtn {
         font-size: 14px;
