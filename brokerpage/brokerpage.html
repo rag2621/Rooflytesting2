@@ -63,6 +63,20 @@
     .refresh-btn:hover {
       background: #2980b9;
     }
+    .filter-btn {
+      background: #f0f0f0;
+      color: #333;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+    .filter-btn.active {
+      background: #3498db;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -107,9 +121,11 @@
     <div class="filter">
       <div class="filter-container">
         <button class="filter-btn active" onclick="filterProperties('all')">All Properties</button>
-        <button class="filter-btn" onclick="filterProperties('flate')">Flate</button>
-        <button class="filter-btn" onclick="filterProperties('pg')">PG</button>
-        <button class="filter-btn" onclick="filterProperties('sale')">Sale</button>
+        <button class="filter-btn" onclick="filterProperties('Flat')">Flat</button>
+        <button class="filter-btn" onclick="filterProperties('PG')">PG</button>
+        <button class="filter-btn" onclick="filterProperties('house')">house</button>
+        <button class="filter-btn" onclick="filterProperties('villa')">villa</button>
+        <button class="filter-btn" onclick="filterProperties('apartment')">villa</button>
       </div>
     </div>
   </div>
@@ -229,7 +245,7 @@
       const stored = localStorage.getItem("assignedProperties");
       if (!stored) return;
       const data = JSON.parse(stored);
-      const filtered = type === 'all' ? data : data.filter(p => p.Type.toLowerCase() === type);
+      const filtered = type === 'all' ? data : data.filter(p => p.Type === type);
       renderProperties(filtered);
     }
 
@@ -248,3 +264,4 @@
   </script>
 </body>
 </html>
+
