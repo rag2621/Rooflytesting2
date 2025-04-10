@@ -46,7 +46,7 @@
                         <label for="password">Password</label>
                         <div class="password-input">
                             <input type="password" id="password" name="password" required>
-                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility" onclick="togglePasswordVisibility()">
                                 <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
@@ -91,20 +91,17 @@
                     const data = await response.json();
                     console.log("Success:", data);
 
-                   
-
                     responseMessage.textContent = data.message || "Something went wrong!";
                     responseMessage.style.color = response.ok ? "green" : "red";
                     if(response.ok) {
                         localStorage.setItem("token", data.Token);
-                    localStorage.setItem("username", data.Username);
-                    localStorage.setItem("Email", data.Email);
-                    localStorage.setItem("KYC", data.Kyc);
-                    localStorage.setItem("type", "broker");
-                    localStorage.setItem("City", data.City);
+                        localStorage.setItem("username", data.Username);
+                        localStorage.setItem("Email", data.Email);
+                        localStorage.setItem("KYC", data.Kyc);
+                        localStorage.setItem("type", "broker");
+                        localStorage.setItem("City", data.City);
                         window.location.replace("/brokerpage");
-                    }
-                    else{
+                    } else {
                         window.alert("Incorrect Credentials");
                         window.location.href="/landingpage";
                     }
@@ -115,6 +112,19 @@
                 }
             });
         });
+
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            const passwordIcon = document.querySelector('.toggle-password svg');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordIcon.style.fill = "#3498db";  // Change icon color when visible
+            } else {
+                passwordField.type = 'password';
+                passwordIcon.style.fill = "none";  // Default color when hidden
+            }
+        }
     </script>
 </body>
-</html> 
+</html>
+
