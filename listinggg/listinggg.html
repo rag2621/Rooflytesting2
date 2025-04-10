@@ -218,7 +218,7 @@
                             <label for="property-address">Address</label>
                             <input type="text" id="property-address" placeholder="Enter full address">
                         </div>
-                        <div id="autocomplete-suggestions"></div>
+                        <div id="autocomplete-suggestions" style="visibility: hidden;"></div>
                         <div class="form-group">
                             <label for="property-city">City</label>
                             <input type="text" id="city" placeholder="Enter city">
@@ -448,6 +448,7 @@
                     if (data.status === 'OK' && data.predictions.length > 0) {
                         suggestionsBox.innerHTML = '';
                         suggestionsBox.style.display = 'block';
+                        suggestionsBox.style.visibility='visible';
 
                         data.predictions.forEach(prediction => {
                             const li = document.createElement('li');
