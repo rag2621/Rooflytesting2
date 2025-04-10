@@ -324,39 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <script>
         function handleSearch(event) {
             event.preventDefault();
-            
-            const searchInput = document.getElementById('searchInput');
-            const propertyType = document.getElementById('propertyType');
-            const searchButton = document.getElementById('searchButton');
-            
-            const searchTerm = searchInput.value.trim();
-            const selectedType = propertyType.value;
-            
-            if (!searchTerm) {
-                searchInput.focus();
-                return;
-            }
-
-            // Disable button and show loading state
-            searchButton.disabled = true;
-            const originalText = searchButton.innerHTML;
-            searchButton.innerHTML = '<span>Searching...</span>';
-
-            // Simulate search (replace with actual search logic)
-            setTimeout(() => {
-                console.log('Searching for:', searchTerm, 'Type:', selectedType);
-             //   window.location.href = `/properties?search=${encodeURIComponent(searchTerm)}&type=${encodeURIComponent(selectedType)}`;
-
-             fetch(`/properties?search=${encodeURIComponent(searchTerm)}&type=${encodeURIComponent(selectedType)}`).then((r)=>{
-                r.json().then((ans)=>{
-                    console.log(ans);
-                })
-             });
-                
-                // Reset button state (though page will likely reload)
-                searchButton.disabled = false;
-                searchButton.innerHTML = originalText;
-            }, 500);
+           winddow.location.href="/listing";
         }
 
         // Add input validation and real-time feedback
