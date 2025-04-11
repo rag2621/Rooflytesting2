@@ -229,6 +229,11 @@
     
 
     <script>
+        window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
 
         function redirect(){
             if(localStorage.getItem("type")=="broker"){
@@ -273,8 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const token = localStorage.getItem("token");
         const profileDropdown = document.getElementById("profileDropdown");
 
-setInterval(() => {
-    const token = localStorage.getItem("token");
+
 
     if (token) {
         const user = localStorage.getItem("username");
@@ -298,7 +302,7 @@ setInterval(() => {
         </a>`;
     } 
       
-}, 1)
+
 
             // Logout function
             document.getElementById("logoutBtn").addEventListener("click", (e) => {
