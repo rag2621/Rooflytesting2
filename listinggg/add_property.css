@@ -33,6 +33,7 @@ body {
     right: 0;
     z-index: 1000;
     margin: 1rem 2rem;
+    border-radius: 100px;
 }
 
 .nav-container {
@@ -116,8 +117,9 @@ body {
 }
 
 /* Add Property Form */
-add-property {
-    padding: 2rem 0;
+.add-property {
+    padding-top: 100px;  /* Increased padding to account for fixed navbar */
+    padding-bottom: 2rem;
 }
 
 .container {
@@ -207,7 +209,6 @@ add-property {
     height: 18px;
 }
 
-
 /* Media Upload */
 .media-upload {
     margin-top: 1rem;
@@ -260,6 +261,7 @@ add-property {
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 2rem;
+    padding-right: 10rem;
 }
 
 .btn-primary,
@@ -581,6 +583,14 @@ body.menu-open {
     .add-property {
         padding-top: 80px;  /* Adjusted for mobile */
     }
+
+    .form-section:has(textarea) {
+        padding: 4.5rem 3rem;  /* Increased from 1.5rem 1rem to 4.5rem 3rem */
+    }
+    
+    .form-section:has(textarea) textarea {
+        min-height: 120px;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -591,4 +601,62 @@ body.menu-open {
     .logo-img {
         height: 35px;
     }
+}
+
+/* Description Section */
+.form-section:has(textarea) {
+    padding: 0rem 10rem;  /* Increased from 2rem to 6rem */
+    margin-bottom: 2rem;
+}
+
+.form-section:has(textarea) h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.form-section:has(textarea) .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-section:has(textarea) label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.form-section:has(textarea) textarea {
+    width: 100%;
+    padding: 1.2rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #2c3e50;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    resize: vertical;
+    min-height: 150px;
+}
+
+.form-section:has(textarea) textarea:focus {
+    border-color: #4169E1;
+    box-shadow: 0 0 0 2px rgba(65, 105, 225, 0.1);
+    outline: none;
+}
+
+.form-section:has(textarea) textarea::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+}
+
+/* Character Counter */
+.form-section:has(textarea) .char-counter {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
 } 
