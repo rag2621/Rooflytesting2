@@ -67,130 +67,70 @@
     </div>
 
   <script>
-    function togglePassword() {
-        const passwordInput = document.getElementById('password');
-        const toggleBtn = document.querySelector('.toggle-password');
-        
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            toggleBtn.textContent = 'Show';
-        } else {
-            passwordInput.type = 'password';
-            toggleBtn.textContent = 'Hide';
+       <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = 'Show';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = 'Hide';
+            }
         }
-    }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("signin").addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            if (localStorage.getItem("token")) {
-                window.alert("You are already logged in");
-                window.location.href = "/landingpage";
-                return;
-            }
-
-            const Email = document.getElementById('email').value;
-            const Pass = document.getElementById('password').value;
-            const cred = { Email: Email, Pass: Pass };
-            const responseMessage = document.getElementById("response-message");
-
-            try {
-                const response = await fetch("/user/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(cred),
-                });
-
-                const data = await response.json();
-                console.log("Success:", data);
-
-                responseMessage.textContent = data.message || "Something went wrong!";
-                responseMessage.style.color = response.ok ? "green" : "red";
-
-                if (response.ok) {
-                    localStorage.setItem("token", data.Token);
-                    localStorage.setItem("username", data.Username);
-                    localStorage.setItem("Email", data.Email);
-                    localStorage.setItem("KYC", data.Kyc);
-                    window.location.replace(<script>
-    function togglePassword() {
-        const passwordInput = document.getElementById('password');
-        const toggleBtn = document.querySelector('.toggle-password');
-        
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            toggleBtn.textContent = 'Show';
-        } else {
-            passwordInput.type = 'password';
-            toggleBtn.textContent = 'Hide';
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("signin").addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            if (localStorage.getItem("token")) {
-                window.alert("You are already logged in");
-                window.location.href = "/landingpage";
-                return;
-            }
-
-            const Email = document.getElementById('email').value;
-            const Pass = document.getElementById('password').value;
-            const cred = { Email: Email, Pass: Pass };
-            const responseMessage = document.getElementById("response-message");
-
-            try {
-                const response = await fetch("/user/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(cred),
-                });
-
-                const data = await response.json();
-                console.log("Success:", data);
-
-                responseMessage.textContent = data.message || "Something went wrong!";
-                responseMessage.style.color = response.ok ? "green" : "red";
-
-                if (response.ok) {
-                    localStorage.setItem("token", data.Token);
-                    localStorage.setItem("username", data.Username);
-                    localStorage.setItem("Email", data.Email);
-                    localStorage.setItem("KYC", data.Kyc);
-                    window.location.replace("/landingpage");
-                } else {
-                    window.alert("Incorrect Credentials");
-                    // No redirect here
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("signin").addEventListener("submit", async function (event) {
+                event.preventDefault();
+                if(localStorage.getItem("token")){
+                    window.alert("A session already Exists");
+                    return 0;
                 }
+                const Email = document.getElementById('email').value;
+                const Pass = document.getElementById('password').value;
+                const cred = { Email: Email, Pass: Pass };
+                const responseMessage = document.getElementById("response-message");
 
-            } catch (error) {
-                console.error("Error:", error);
-                responseMessage.textContent = "Error occurred! Please try again later.";
-                responseMessage.style.color = "red";
-            }
-        });
-    });
-</script>
-) 
-                } else {
-                    window.alert("Incorrect Credentials");
-                    // No redirect here
+                try {
+                    const response = await fetch("/user/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(cred),
+                    });
+
+                    const data = await response.json();
+                    console.log("Success:", data);
+
+
+                    responseMessage.textContent = data.message || "Something went wrong!";
+                    responseMessage.style.color = response.ok ? "green" : "red";
+                    if(response.ok){
+                        
+                    localStorage.setItem("token",data.Token);
+                    localStorage.setItem("username",data.Username);
+                    localStorage.setItem("Email",data.Email);
+                    localStorage.setItem("KYC",data.Kyc);
+                       window.location.replace("/landingpage");
+                       
+                    }
+                    else{
+                        window.alert("Incorrect Credentials");
+                        window.location.href="/landingpage";
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    responseMessage.textContent = "Error occurred! Please try again later.";
+                    responseMessage.style.color = "red";
                 }
-
-            } catch (error) {
-                console.error("Error:", error);
-                responseMessage.textContent = "Error occurred! Please try again later.";
-                responseMessage.style.color = "red";
-            }
+            });
         });
-    });
+    </script>
+    
+   
 </script>
 
 </body>
