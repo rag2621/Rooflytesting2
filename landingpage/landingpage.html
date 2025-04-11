@@ -24,7 +24,7 @@
             </div>
             <div class="auth-buttons">
                 <button id="startListingBtn" class="start-listing-btn" onclick="redirectToListing()">Start Listing</button>
-                <div class="profile-icon" >
+                <div class="profile-icon" onclick="toggleDropdown()">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
@@ -128,6 +128,11 @@
 </style>
 
     <script>
+        window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
         window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -229,11 +234,6 @@
     
 
     <script>
-        window.addEventListener('pageshow', function (event) {
-    if (event.persisted) {
-        window.location.reload();
-    }
-});
 
         function redirect(){
             if(localStorage.getItem("type")=="broker"){
@@ -278,14 +278,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const token = localStorage.getItem("token");
         const profileDropdown = document.getElementById("profileDropdown");
 
-
-
         if (token) {
             // Fetch user details (Replace with actual API call if needed)
             const user = localStorage.getItem("username");
 
             // Show username and logout button
-    profileDropdown.innerHTML = 
+    profileDropdown.innerHTML = `
     <span class="username">${user}</span>
     <button id="kycBtn" class="kyc-button">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -302,8 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </svg>
         Logout
     </a>
-      
-
+`;
 
             // Logout function
             document.getElementById("logoutBtn").addEventListener("click", (e) => {
@@ -828,9 +825,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <div class="footer-section">
                     <h4>Contact Us</h4>
-                    <p>Email: rooflyestates@gmail.com</p>
+                    <p>Email: contact@rooflyestates.com</p>
                     <p>Phone: +91 77977 89073</p>
-                    <p>Address: 134-A, Guru Fateh Town, Chandigarh-Ludhiana Highway, Punjab</p>
+                
                 </div>
             </div>
             <div class="footer-bottom">
@@ -941,3 +938,4 @@ document.addEventListener("DOMContentLoaded", () => {
 </style>
 </body>
 </html> 
+
