@@ -162,7 +162,7 @@ console.log(isDOBValid);
 console.log(formattedDate );
 
     // If all validations pass, return success
-    if ( isDOBValid && isIDValid) {
+    if ( isDOBValid && extractedText.includes(idNumber) || isDOBValid && extractedText.includes(formattedNumber)) {
       const ddd= await kyc.create({ID:idNumber});
 
       if(Type=="broker"){
